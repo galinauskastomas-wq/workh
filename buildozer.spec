@@ -11,7 +11,6 @@ fullscreen = 0
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 android.api = 34
 android.minapi = 21
-android.sdk = 34
 android.ndk = 25b
 android.archs = armeabi-v7a, arm64-v8a
 android.release_artifact = apk
