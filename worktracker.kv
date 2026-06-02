@@ -1,0 +1,204 @@
+<Widget>:
+    font_name: 'Roboto'
+
+<CardLabel@Label>:
+    font_size: '16sp'
+    color: 0.9, 0.9, 0.9, 1
+    markup: True
+
+<StyledTextInput@TextInput>:
+    multiline: False
+    input_filter: 'float'
+    input_type: 'number'
+    font_size: '20sp'
+    padding: [10, 12, 10, 12]
+    background_normal: ''
+    background_color: 0.15, 0.18, 0.22, 1
+    foreground_color: 1, 1, 1, 1
+    cursor_color: 0.21, 0.58, 0.96, 1
+
+<WorkTracker>:
+    canvas.before:
+        Color:
+            rgba: 0.08, 0.1, 0.13, 1  # Modernus tamsus fonas
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    orientation: 'vertical'
+    padding: [20, 30, 20, 20]
+    spacing: 15
+
+    # --- VIRŠŪNĖS ANTRAŠTĖ ---
+    BoxLayout:
+        size_hint_y: None
+        height: '40dp'
+        Label:
+            text: "[b]WorkHoursApp[/b]"
+            font_size: '24sp'
+            color: 0.21, 0.58, 0.96, 1  # Šviesiai mėlyna akcento spalva
+            markup: True
+            halign: 'left'
+            valign: 'middle'
+            text_size: self.size
+
+    # --- ĮVESTIES BLOKAS ---
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 8
+        size_hint_y: None
+        height: '160dp'
+        canvas.before:
+            Color:
+                rgba: 0.12, 0.14, 0.18, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [12]
+        padding: 15
+
+        Label:
+            text: "Įveskite šiandienos duomenis:"
+            font_size: '14sp'
+            color: 0.6, 0.6, 0.6, 1
+            size_hint_y: None
+            height: '20dp'
+            halign: 'left'
+            text_size: self.size
+
+        BoxLayout:
+            spacing: 10
+            StyledTextInput:
+                id: hours_input
+                hint_text: "Valandos"
+                hint_text_color: 0.4, 0.4, 0.4, 1
+            StyledTextInput:
+                id: rate_input
+                hint_text: "Valandos įkainis (€)"
+                hint_text_color: 0.4, 0.4, 0.4, 1
+
+        Button:
+            text: "Išsaugoti duomenis"
+            font_size: '16sp'
+            bold: True
+            size_hint_y: None
+            height: '45dp'
+            background_normal: ''
+            background_color: 0.21, 0.58, 0.96, 1
+            color: 1, 1, 1, 1
+            on_press: root.save_hours()
+            canvas.before:
+                Color:
+                    rgba: 0.21, 0.58, 0.96, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [8]
+
+    # --- PRANEŠIMŲ EILUTĖ ---
+    Label:
+        id: status_label
+        text: ""
+        font_size: '14sp'
+        color: 0.9, 0.3, 0.3, 1
+        size_hint_y: None
+        height: '20dp'
+
+    # --- STATISTIKOS KORTELĖS ---
+    GridLayout:
+        cols: 2
+        spacing: 12
+        size_hint_y: None
+        height: '140dp'
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 15
+            canvas.before:
+                Color:
+                    rgba: 0.12, 0.14, 0.18, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [12]
+            CardLabel:
+                text: "Dirbta dienų:"
+                color: 0.6, 0.6, 0.6, 1
+            CardLabel:
+                id: days_label
+                text: "[b]0[/b]"
+                font_size: '22sp'
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 15
+            canvas.before:
+                Color:
+                    rgba: 0.12, 0.14, 0.18, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [12]
+            CardLabel:
+                text: "Viso šį mėnesį:"
+                color: 0.6, 0.6, 0.6, 1
+            CardLabel:
+                id: total_label
+                text: "[b]0 val.[/b]"
+                font_size: '22sp'
+
+    # --- UŽDARBIO FINANSINĖ KORTELĖ ---
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: 15
+        size_hint_y: None
+        height: '60dp'
+        canvas.before:
+            Color:
+                rgba: 0.15, 0.24, 0.15, 1  # Žalsvas atspalvis finansams
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [12]
+        CardLabel:
+            text: "Preliminarus uždarbis:"
+            halign: 'left'
+            text_size: self.size
+            valign: 'middle'
+        CardLabel:
+            id: earnings_label
+            text: "[b]0.00 €[/b]"
+            font_size: '20sp'
+            color: 0.42, 0.85, 0.42, 1
+            halign: 'right'
+            text_size: self.size
+            valign: 'middle'
+
+    # --- ISTORIJOS ANTRAŠTĖ ---
+    Label:
+        text: "Paskutiniai įrašai:"
+        font_size: '14sp'
+        color: 0.6, 0.6, 0.6, 1
+        size_hint_y: None
+        height: '20dp'
+        halign: 'left'
+        text_size: self.size
+
+    # --- ISTORIJOS SĄRAŠAS ---
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+        canvas.before:
+            Color:
+                rgba: 0.12, 0.14, 0.18, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [12]
+        BoxLayout:
+            id: history_container
+            orientation: 'vertical'
+            size_hint_y: None
+            height: self.minimum_height
+            padding: 10
+            spacing: 8
