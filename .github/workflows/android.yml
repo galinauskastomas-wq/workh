@@ -7,6 +7,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    # Pridedame aplinkos kintamąjį, kad GitHub priverstinai leistų kompiliuoti kodą naujoje aplinkoje
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
     steps:
     - uses: actions/checkout@v4
 
@@ -19,7 +23,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libsqlite3-dev lldd cython3 virtualenv
-        pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install buildozer
 
     - name: Build with Buildozer
