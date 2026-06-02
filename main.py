@@ -6,27 +6,30 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04  # Naudojame itin stabilią senesnę Ubuntu aplinką
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10' # Pakeičiame į 3.10, kuri idealiai suderinama su žemiau esančiais įrankiais
+        python-version: '3.11'
 
     - name: Install System Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libsqlite3-dev lld cython3 virtualenv unzip openjdk-17-jdk wget
-        # Atsisiunčiame tikslų Android SDK build-tools paketą, kurio trūko
-        sudo apt-get install -y android-sdk-build-tools
-
-    - name: Install Buildozer
-      run: |
+        sudo apt-get install -y libsqlite3-dev lld cython3 virtualenv unzip openjdk-17-jdk wget aidl
         python -m pip install --upgrade pip
-        # Įdiegiame patikrintą 1.4.0 versiją, kuri automatiškai išsprendžia Aidl kelius
-        pip install buildozer==1.4.0
+        pip install "buildozer>=1.5.0"
+
+    - name: Pre-create Buildozer SDK and Aidl path
+      run: |
+        # Šis žingsnis priverstinai sukuria aplanką, kurio trūkumą rodė klaida
+        mkdir -p /home/runner/.buildozer/android/platform/android-sdk/build-tools/34.0.0
+        # Įkopijuojame sistemos aidl programą tiesiai į Buildozer laukiamą vietą
+        cp /usr/bin/aidl /home/runner/.buildozer/android/platform/android-sdk/build-tools/34.0.0/aidl
+        chmod +x /home/runner/.buildozer/android/platform/android-sdk/build-tools/34.0.0/aidl
+        echo "Aidl failas sėkmingai paruoštas vietoje!"
 
     - name: Build with Buildozer
       run: |
@@ -39,3 +42,4 @@ jobs:
       with:
         name: WorkHoursApp-APK
         path: bin/*.apk
+
